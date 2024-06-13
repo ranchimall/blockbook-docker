@@ -10,10 +10,11 @@ COPY blockbook-flo-testnet_0.4.0_amd64.deb /tmp/blockbook-flo.deb
 
 RUN apt-get update && \
     apt-get install -y /tmp/backend-flo.deb /tmp/blockbook-flo.deb supervisor && \
-    rm /tmp/backend-flo.deb /tmp/blockbook-flo.deb
+    rm /tmp/backend-flo.deb /tmp/blockbook-flo.deb && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN sed -i "s/daemon=1/daemon=0/g" /opt/coins/nodes/flo_testnet/flo_testnet.conf
-RUN sed -i '$a addnode=ramanujam.ranchimall.net\naddnode=turing.ranchimall.net\naddnode=stevejobs.ranchimall.net\naddnode=brahmagupta.ranchimall.net\naddnode=feynman.ranchimall.net' /opt/coins/nodes/flo_testnet/flo_testnet.conf
+RUN sed -i "s/daemon=1/daemon=0/g" /opt/coins/nodes/flo_testnet/flo_testnet.conf && \
+    sed -i '$a addnode=ramanujam.ranchimall.net\naddnode=turing.ranchimall.net\naddnode=stevejobs.ranchimall.net\naddnode=brahmagupta.ranchimall.net\naddnode=feynman.ranchimall.net' /opt/coins/nodes/flo_testnet/flo_testnet.conf
 
 # RUN cd /opt/coins/nodes/flo_testnet && \
 #     /opt/coins/nodes/flo_testnet/bin/flod --testnet -datadir=/opt/coins/data/flo_testnet/backend -conf=/opt/coins/nodes/flo_testnet/flo_testnet.conf -pid=/run/flo_testnet/flo_testnet.pid
