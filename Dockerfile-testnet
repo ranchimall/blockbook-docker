@@ -3,10 +3,10 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Copying files to the container
-# COPY peers.dat /tmp
-COPY supervisord.conf /tmp
-COPY backend-flo-testnet_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
-COPY blockbook-flo-testnet_0.4.0_amd64.deb /tmp/blockbook-flo.deb
+# COPY /deb-files-testnet/peers.dat /tmp
+COPY /deb-files-testnet/supervisord.conf /tmp
+COPY /deb-files-testnet/backend-flo-testnet_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
+COPY /deb-files-testnet/blockbook-flo-testnet_0.4.0_amd64.deb /tmp/blockbook-flo.deb
 
 # Installing Blockbook and Supervisor
 RUN apt-get update && \

@@ -78,11 +78,11 @@ Steps to build the Docker image for Testnet.
 
 -   **Building the Docker Image**
 
-    Navigate to the `testnet` directory of the repository cloned or downloaded and build the Docker image:
+    Navigate to the directory where the repository is cloned or downloaded and build the Docker image:
 
     ```sh
-    cd <path/to/cloned/repository/testnet>
-    docker build -t <imagename> .
+    cd <path/to/cloned/repository>
+    docker build -f Dockerfile-testnet -t <imagename> .
     ```
 
 -   **Running the Docker Container**

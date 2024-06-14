@@ -3,9 +3,9 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Copying files to the container
-COPY supervisord.conf /tmp
-COPY backend-flo_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
-COPY blockbook-flo_0.4.0_amd64.deb /tmp/blockbook-flo.deb
+COPY /deb-files-mainnet/supervisord.conf /tmp
+COPY /deb-files-mainnet/backend-flo_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
+COPY /deb-files-mainnet/blockbook-flo_0.4.0_amd64.deb /tmp/blockbook-flo.deb
 
 # Installing Blockbook and Supervisor
 RUN apt-get update && \
