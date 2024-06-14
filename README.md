@@ -1,6 +1,6 @@
-# Blockbook Docker (Single Contianer)
+# Blockbook Docker (Single Container)
 
-This guide will help you build and run the Docker image for Blockbook Mainnet and Testnet, which is based on Ubuntu 22.04 and includes both backend and frontend components in single contianer.
+This guide will help you build and run the Docker image for Blockbook Mainnet and Testnet, which is based on Ubuntu 22.04 and includes both backend and frontend components in a single container.
 
 ## Prerequisites
 
@@ -11,11 +11,11 @@ This guide will help you build and run the Docker image for Blockbook Mainnet an
 
 # Mainnet
 
-Steps to build the docker image for mainnet.
+Steps to build the Docker image for mainnet.
 
 -   **Building the Docker Image**
 
-    Navigate to the directory where the repository is cloned or downloaded and build the docker image:
+    Navigate to the directory where the repository is cloned or downloaded and build the Docker image:
 
     ```sh
     cd <path/to/cloned/repository>
@@ -24,7 +24,7 @@ Steps to build the docker image for mainnet.
 
 -   **Running the Docker Container**
 
-    Create a named volume for Persistent storage using:
+    Create a named volume for persistent storage using:
 
     ```sh
     docker volume create <volume_name>
@@ -60,7 +60,7 @@ Steps to build the docker image for mainnet.
     docker exec -it <containername> bash
     ```
 
-    To view the logs of Backend and Frontend, run:
+    To view the logs of the backend and frontend, run:
 
     ```sh
     # Backend logs
@@ -74,26 +74,26 @@ Steps to build the docker image for mainnet.
 
 # Testnet
 
-Steps to build the docker image for Testnet.
+Steps to build the Docker image for Testnet.
 
 -   **Building the Docker Image**
 
-    Navigate to the directory where the repository is cloned or downloaded and build the docker image:
+    Navigate to the `testnet` directory of the repository cloned or downloaded and build the Docker image:
 
     ```sh
-    cd <path/to/cloned/repository>
+    cd <path/to/cloned/repository/testnet>
     docker build -t <imagename> .
     ```
 
 -   **Running the Docker Container**
 
-    Create a named volume for Persistent storage using:
+    Create a named volume for persistent storage using:
 
     ```sh
     docker volume create <volume_name>
     ```
 
-    Run the Docker container in detached mode and for mainnet map port `19166` on your host to port `19166` on the container:
+    Run the Docker container in detached mode and for Testnet map port `19166` on your host to port `19166` on the container:
 
     ```sh
     docker run -d -p 19166:19166 --mount source=<volume_name>,target=/opt/coins <imagename>
@@ -123,7 +123,7 @@ Steps to build the docker image for Testnet.
     docker exec -it <containername> bash
     ```
 
-    To view the logs of Backend and Frontend, run:
+    To view the logs of the backend and frontend, run:
 
     ```sh
     # Backend logs
