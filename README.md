@@ -1,81 +1,137 @@
-# Blockbook Docker
+# Blockbook Docker (Single Contianer)
 
-This guide will help you build and run the Docker image for Blockbook Mainnet and Testnet, which is based on Ubuntu 22.04 and includes both backend and frontend components.
+This guide will help you build and run the Docker image for Blockbook Mainnet and Testnet, which is based on Ubuntu 22.04 and includes both backend and frontend components in single contianer.
 
 ## Prerequisites
 
 -   [Docker installed on your machine](https://docs.docker.com/engine/install/).
 -   Clone or download the repository to your local machine.
 
-## Building the Docker Image
+---
 
-Navigate to the directory where the repository is cloned or downloaded:
+# Mainnet
 
-```sh
-cd <path/to/cloned/repository>
-```
+Steps to build the docker image for mainnet.
 
-Build the Docker image using the following command:
+-   **Building the Docker Image**
 
-```sh
-docker build -t <imagename> .
-```
+    Navigate to the directory where the repository is cloned or downloaded and build the docker image:
 
-## Running the Docker Container
+    ```sh
+    cd <path/to/cloned/repository>
+    docker build -t <imagename> .
+    ```
 
-Create a named volume for Persistent storage using:
+-   **Running the Docker Container**
 
-```sh
-docker volume create <volume_name>
-```
+    Create a named volume for Persistent storage using:
 
-Run the Docker container in detached mode and for mainnet map port `9166` on your host to port `9166` on the container and for testnet map `19166`:
+    ```sh
+    docker volume create <volume_name>
+    ```
 
-```sh
-docker run -d -p 9166:9166 --mount source=<volume_name>,target=/opt/coins <imagename>
-```
+    Run the Docker container in detached mode and for mainnet map port `9166` on your host to port `9166` on the container:
 
-## Accessing the Frontend
+    ```sh
+    docker run -d -p 9166:9166 --mount source=<volume_name>,target=/opt/coins <imagename>
+    ```
 
-Once the Docker container is running, you can access the frontend of the application by navigating to:
+-   **Accessing the Frontend**
 
-```sh
-https://localhost:9166
-```
+    Once the Docker container is running, you can access the frontend of the application by navigating to:
 
-in your web browser.
+    `https://localhost:9166`
 
-## Accessing Logs
+    in your web browser.
 
-To check the logs, you can access the container shell and use the `tail` command.
+-   **Accessing Logs**
 
-First, get the container's name or ID:
+    To check the logs, you can access the container shell and use the `tail` command.
 
-```sh
-docker ps -a
-```
+    First, get the container's name or ID:
 
-Then, access the container shell:
+    ```sh
+    docker ps -a
+    ```
 
-```sh
-docker exec -it <containername> bash
-```
+    Then, access the container shell:
 
-### Checking Backend Logs
+    ```sh
+    docker exec -it <containername> bash
+    ```
 
-To view the backend logs, run:
+    To view the logs of Backend and Frontend, run:
 
-```sh
-tail -f /opt/coins/data/flo/backend/debug.log
-```
+    ```sh
+    # Backend logs
+    tail -f /opt/coins/data/flo/backend/debug.log
 
-### Checking Frontend Logs
+    # Frontend logs
+    tail -f /opt/coins/blockbook/flo/logs/blockbook.INFO
+    ```
 
-To view the frontend logs, run:
+---
 
-```sh
-tail -f /opt/coins/blockbook/flo/logs/blockbook.INFO
-```
+# Testnet
+
+Steps to build the docker image for Testnet.
+
+-   **Building the Docker Image**
+
+    Navigate to the directory where the repository is cloned or downloaded and build the docker image:
+
+    ```sh
+    cd <path/to/cloned/repository>
+    docker build -t <imagename> .
+    ```
+
+-   **Running the Docker Container**
+
+    Create a named volume for Persistent storage using:
+
+    ```sh
+    docker volume create <volume_name>
+    ```
+
+    Run the Docker container in detached mode and for mainnet map port `19166` on your host to port `19166` on the container:
+
+    ```sh
+    docker run -d -p 19166:19166 --mount source=<volume_name>,target=/opt/coins <imagename>
+    ```
+
+-   **Accessing the Frontend**
+
+    Once the Docker container is running, you can access the frontend of the application by navigating to:
+
+    `https://localhost:19166`
+
+    in your web browser.
+
+-   **Accessing Logs**
+
+    To check the logs, you can access the container shell and use the `tail` command.
+
+    First, get the container's name or ID:
+
+    ```sh
+    docker ps -a
+    ```
+
+    Then, access the container shell:
+
+    ```sh
+    docker exec -it <containername> bash
+    ```
+
+    To view the logs of Backend and Frontend, run:
+
+    ```sh
+    # Backend logs
+    tail -f /opt/coins/data/flo_testnet/backend/testnet4/debug.log
+
+    # Frontend logs
+    tail -f /opt/coins/blockbook/flo_testnet/logs/blockbook.INFO
+    ```
 
 ## Additional Commands
 
@@ -107,7 +163,7 @@ Replace `<path/to/cloned/repository>`, `<imagename>`, and `<containername>` with
 
 ## Troubleshooting
 
--   Ensure that no other application is using port `9166` on your host machine.
+-   Ensure that no other application is using port `9166` or `19166` on your host machine.
 -   If you encounter issues, check the Docker container logs:
 
     ```sh
