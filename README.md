@@ -19,7 +19,7 @@ Steps to build the Docker image for mainnet.
 
     ```sh
     cd <path/to/cloned/repository>
-    docker build -t <imagename> .
+    docker build -t asif158/mainnet:1.0.0 .
     ```
 
 -   **Running the Docker Container**
@@ -27,13 +27,14 @@ Steps to build the Docker image for mainnet.
     Create a named volume for persistent storage using:
 
     ```sh
-    docker volume create <volume_name>
+    docker volume create mainnet
     ```
 
     Run the Docker container in detached mode and for mainnet map port `9166` on your host to port `9166` on the container:
 
     ```sh
-    docker run -d -p 9166:9166 --mount source=<volume_name>,target=/opt/coins <imagename>
+    docker run -d --name blockbook-mainnet -p 9166:9166 --mount source=mainnet,target=/opt/coins asif158/mainnet:1.0.0
+
     ```
 
 -   **Accessing the Frontend**
@@ -46,18 +47,10 @@ Steps to build the Docker image for mainnet.
 
 -   **Accessing Logs**
 
-    To check the logs, you can access the container shell and use the `tail` command.
-
-    First, get the container's name or ID:
+    To check the logs, you can access the container shell and use the `tail` command:
 
     ```sh
-    docker ps -a
-    ```
-
-    Then, access the container shell:
-
-    ```sh
-    docker exec -it <containername> bash
+    docker exec -it blockbook-mainnet bash
     ```
 
     To view the logs of the backend and frontend, run:
@@ -82,7 +75,7 @@ Steps to build the Docker image for Testnet.
 
     ```sh
     cd <path/to/cloned/repository>
-    docker build -f Dockerfile-testnet -t <imagename> .
+    docker build -f Dockerfile-testnet -t asif158/testnet:1.0.0 .
     ```
 
 -   **Running the Docker Container**
@@ -90,13 +83,13 @@ Steps to build the Docker image for Testnet.
     Create a named volume for persistent storage using:
 
     ```sh
-    docker volume create <volume_name>
+    docker volume create testnet
     ```
 
     Run the Docker container in detached mode and for Testnet map port `19166` on your host to port `19166` on the container:
 
     ```sh
-    docker run -d -p 19166:19166 --mount source=<volume_name>,target=/opt/coins <imagename>
+    docker run -d --name blockbook-testnet -p 19166:19166 --mount source=testnet,target=/opt/coins asif158/testnet:1.0.0
     ```
 
 -   **Accessing the Frontend**
@@ -109,18 +102,10 @@ Steps to build the Docker image for Testnet.
 
 -   **Accessing Logs**
 
-    To check the logs, you can access the container shell and use the `tail` command.
-
-    First, get the container's name or ID:
+    To check the logs, you can access the container shell and use the `tail` command:
 
     ```sh
-    docker ps -a
-    ```
-
-    Then, access the container shell:
-
-    ```sh
-    docker exec -it <containername> bash
+    docker exec -it blockbook-testnet bash
     ```
 
     To view the logs of the backend and frontend, run:
