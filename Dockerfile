@@ -1,16 +1,27 @@
-# Use a base image
-FROM nestybox/ubuntu-focal-systemd-docker
+FROM ubuntu:22.04
 
-# Install necessary packages
-RUN apt update && \
-    apt install -y wget gnupg2 software-properties-common unzip
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Download deb files
-RUN wget https://github.com/ranchimall/blockbook-docker/archive/main.zip && unzip main.zip
-RUN cd blockbook-docker-main && sudo apt install -y ./deb-files/dind_backend-flo_0.15.1.1-satoshilabs-1_amd64.deb && sudo apt install -y ./deb-files/dind_blockbook-flo_0.4.0_amd64.deb
+# Copying files to the container
+COPY /deb-files-mainnet/supervisord.conf /tmp
+COPY /deb-files-mainnet/backend-flo_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
+COPY /deb-files-mainnet/blockbook-flo_0.4.0_amd64.deb /tmp/blockbook-flo.deb
 
-# Expose ports
-EXPOSE 22 80 9166
+# Installing Blockbook and Supervisor
+RUN apt-get update && \
+    apt-get install -y /tmp/backend-flo.deb /tmp/blockbook-flo.deb supervisor && \
+    rm /tmp/backend-flo.deb /tmp/blockbook-flo.deb && \
+    rm -rf /var/lib/apt/lists/*
 
-# Start your applications (Uncomment and replace with your application start commands)
-CMD ["/lib/systemd/systemd"]
+# Configuring backend as forground process under supervisord
+RUN sed -i "s/daemon=1/daemon=0/g" /opt/coins/nodes/flo/flo.conf
+    
+EXPOSE 9166
+
+VOLUME /opt/coins
+
+CMD ["/usr/bin/supervisord", "-c", "/tmp/supervisord.conf"]
+
+# check logs 
+# tail -f /opt/coins/data/flo/backend/debug.log
+# tail -f /opt/coins/blockbook/flo/logs/blockbook.INFO
