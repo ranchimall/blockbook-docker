@@ -11,37 +11,39 @@ This guide will help you build and run the Docker image for Blockbook Mainnet an
 
 # Mainnet
 
-Steps to build the Docker image for mainnet.
+Steps to build the Docker image for Mainnet.
 
 -   **Building the Docker Image**
 
-    Navigate to the directory where the repository is cloned or downloaded and build the Docker image:
+    Navigate to the directory where the repository is cloned and build the Docker image:
 
     ```sh
-    cd <path/to/cloned/repository>
-    docker build -t asif158/mainnet:1.0.0 .
+    git clone https://github.com/ranchimall/blockbook-docker
+    cd blockbook-docker
+    docker build -f Dockerfile -t ranchimall/blockbook-mainnet:1.0.0 .
     ```
 
 -   **Running the Docker Container**
 
-    Create a named volume for persistent storage using:
+    Create a named volume for persistent storage:
 
     ```sh
     docker volume create mainnet
     ```
 
-    Run the Docker container in detached mode and for mainnet map port `9166` on your host to port `9166` on the container:
+    Run the Docker container in detached mode and map port `9166` of the container to port `9166` (or any other port) on the host machine (`-p host-port:container-port`):
 
     ```sh
-    docker run -d --name blockbook-mainnet -p 9166:9166 --mount source=mainnet,target=/opt/coins asif158/mainnet:1.0.0
-
+    docker run -d --name blockbook-mainnet -p 9166:9166 --mount source=mainnet,target=/opt/coins ranchimall/blockbook-mainnet:1.0.0
     ```
 
 -   **Accessing the Frontend**
 
     Once the Docker container is running, you can access the frontend of the application by navigating to:
 
-    `https://localhost:9166`
+    ```sh
+    https://localhost:9166
+    ```
 
     in your web browser.
 
@@ -74,29 +76,31 @@ Steps to build the Docker image for Testnet.
     Navigate to the directory where the repository is cloned or downloaded and build the Docker image:
 
     ```sh
-    cd <path/to/cloned/repository>
-    docker build -f Dockerfile-testnet -t asif158/testnet:1.0.0 .
+    cd blockbook-docker
+    docker build -f Dockerfile-testnet -t ranchimall/blockbook-testnet:1.0.0 .
     ```
 
 -   **Running the Docker Container**
 
-    Create a named volume for persistent storage using:
+    Create a named volume for persistent storage:
 
     ```sh
     docker volume create testnet
     ```
 
-    Run the Docker container in detached mode and for Testnet map port `19166` on your host to port `19166` on the container:
+    Run the Docker container in detached mode and map port `19166` of the container to port `19166` (or any other port) on the host machine (`-p host-port:container-port`):
 
     ```sh
-    docker run -d --name blockbook-testnet -p 19166:19166 --mount source=testnet,target=/opt/coins asif158/testnet:1.0.0
+    docker run -d --name blockbook-testnet -p 19166:19166 --mount source=testnet,target=/opt/coins ranchimall/blockbook-testnet:1.0.0
     ```
 
 -   **Accessing the Frontend**
 
     Once the Docker container is running, you can access the frontend of the application by navigating to:
 
-    `https://localhost:19166`
+    ```sh
+    https://localhost:19166
+    ```
 
     in your web browser.
 
@@ -144,7 +148,7 @@ Steps to build the Docker image for Testnet.
     docker rmi <imagename>
     ```
 
-Replace `<path/to/cloned/repository>`, `<imagename>`, and `<containername>` with the actual path, image name, and container name or ID, respectively.
+Replace `<imagename>` and `<containername>` with the actual image name and container name or ID, respectively.
 
 ## Troubleshooting
 
@@ -154,3 +158,5 @@ Replace `<path/to/cloned/repository>`, `<imagename>`, and `<containername>` with
     ```sh
     docker logs <containername>
     ```
+
+---
