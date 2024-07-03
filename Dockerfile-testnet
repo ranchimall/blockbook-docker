@@ -4,19 +4,23 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Copying files to the container
 # COPY /deb-files-testnet/peers.dat /tmp
-COPY /deb-files-testnet/supervisord.conf /tmp
 COPY /deb-files-testnet/backend-flo-testnet_0.15.1.1-satoshilabs-1_amd64.deb /tmp/backend-flo.deb
 COPY /deb-files-testnet/blockbook-flo-testnet_0.4.0_amd64.deb /tmp/blockbook-flo.deb
 
 # Installing Blockbook and Supervisor
 RUN apt-get update && \
-    apt-get install -y /tmp/backend-flo.deb /tmp/blockbook-flo.deb supervisor && \
+    apt-get install -y /tmp/backend-flo.deb /tmp/blockbook-flo.deb supervisor wget && \
     rm /tmp/backend-flo.deb /tmp/blockbook-flo.deb && \
     rm -rf /var/lib/apt/lists/*
 
+# Copying conf file after installing supervisor to fix scripting error
+COPY /deb-files-testnet/supervisord.conf /etc/supervisor/supervisord.conf
+COPY start.sh /tmp
+
 # Configuring backend as forground process and adding nodes to sync backend
 RUN sed -i "s/daemon=1/daemon=0/g" /opt/coins/nodes/flo_testnet/flo_testnet.conf && \
-    sed -i '$a addnode=ramanujam.ranchimall.net\naddnode=turing.ranchimall.net\naddnode=stevejobs.ranchimall.net\naddnode=brahmagupta.ranchimall.net\naddnode=feynman.ranchimall.net' /opt/coins/nodes/flo_testnet/flo_testnet.conf
+    sed -i '$a addnode=ramanujam.ranchimall.net\naddnode=turing.ranchimall.net\naddnode=stevejobs.ranchimall.net\naddnode=brahmagupta.ranchimall.net\naddnode=feynman.ranchimall.net' /opt/coins/nodes/flo_testnet/flo_testnet.conf && \
+    chmod +x /tmp/start.sh
 
 # RUN cd /opt/coins/nodes/flo_testnet && \
 #     /opt/coins/nodes/flo_testnet/bin/flod --testnet -datadir=/opt/coins/data/flo_testnet/backend -conf=/opt/coins/nodes/flo_testnet/flo_testnet.conf -pid=/run/flo_testnet/flo_testnet.pid
@@ -27,7 +31,8 @@ EXPOSE 19166
 
 VOLUME /opt/coins
 
-CMD ["/usr/bin/supervisord", "-c", "/tmp/supervisord.conf"]
+# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/bin/bash", "-c", "/tmp/start.sh"]
 
 # check logs
 # tail -f /opt/coins/data/flo_testnet/backend/testnet4/debug.log
