@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - upgrade/separate-image/ci-cd-testing
+      - upgrade/separate-images/ci-cd-testing
 
 jobs:
   build:
