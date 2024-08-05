@@ -2,12 +2,12 @@
 set -e
 
 # Paths for frontend bootstrap files
-FRONTEND_BOOTSTRAP_URL_FILE="/opt/coins/data/flo/blockbook/bootstrap-url.txt"
-FRONTEND_BOOTSTRAP_FILE_HASH_FILE="/opt/coins/data/flo/blockbook/bootstrap-file-hash.txt"
+FRONTEND_BOOTSTRAP_URL_FILE="/opt/coins/data/flo_testnet/blockbook/bootstrap-url.txt"
+FRONTEND_BOOTSTRAP_FILE_HASH_FILE="/opt/coins/data/flo_testnet/blockbook/bootstrap-file-hash.txt"
 
 # Paths for backend bootstrap files
-BACKEND_BOOTSTRAP_URL_FILE="/opt/coins/data/flo/backend/bootstrap-url.txt"
-BACKEND_BOOTSTRAP_FILE_HASH_FILE="/opt/coins/data/flo/backend/bootstrap-file-hash.txt"
+BACKEND_BOOTSTRAP_URL_FILE="/opt/coins/data/flo_testnet/backend/bootstrap-url.txt"
+BACKEND_BOOTSTRAP_FILE_HASH_FILE="/opt/coins/data/flo_testnet/backend/bootstrap-file-hash.txt"
 
 # Function to calculate the hash of a file
 calculate_file_hash() {
@@ -102,26 +102,26 @@ case "$1" in
     echo "Running frontend command with IP: $new_ip"
     
     if [ -n "$BOOTSTRAP_FILE" ] && [ -f "$BOOTSTRAP_FILE" ]; then
-      handle_bootstrap_file "$BOOTSTRAP_FILE" "/opt/coins/data/flo/blockbook" "$FRONTEND_BOOTSTRAP_FILE_HASH_FILE"
+      handle_bootstrap_file "$BOOTSTRAP_FILE" "/opt/coins/data/flo_testnet/blockbook" "$FRONTEND_BOOTSTRAP_FILE_HASH_FILE"
     elif [ -n "$BOOTSTRAP_URL" ]; then
-      handle_bootstrap_url "$BOOTSTRAP_URL" "/opt/coins/data/flo/blockbook" "$FRONTEND_BOOTSTRAP_URL_FILE" "bootstrap-frontend.tar.gz"
+      handle_bootstrap_url "$BOOTSTRAP_URL" "/opt/coins/data/flo_testnet/blockbook" "$FRONTEND_BOOTSTRAP_URL_FILE" "bootstrap-frontend.tar.gz"
     fi
 
-    update_config_file "/opt/coins/blockbook/flo/config/blockchaincfg.json" "$new_ip"
-    cd /opt/coins/blockbook/flo
-    exec /opt/coins/blockbook/flo/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo/config/blockchaincfg.json -datadir=/opt/coins/data/flo/blockbook/db -sync -internal=:9066 -public=:9166 -certfile=/opt/coins/blockbook/flo/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo/logs -dbcache=1073741824
+    update_config_file "/opt/coins/blockbook/flo_testnet/config/blockchaincfg.json" "$new_ip"
+    cd /opt/coins/blockbook/flo_testnet
+    exec /opt/coins/blockbook/flo_testnet/bin/blockbook -blockchaincfg=/opt/coins/blockbook/flo_testnet/config/blockchaincfg.json -datadir=/opt/coins/data/flo_testnet/blockbook/db -sync -internal=:19066 -public=:19166 -certfile=/opt/coins/blockbook/flo_testnet/cert/blockbook -explorer= -log_dir=/opt/coins/blockbook/flo_testnet/logs -dbcache=1073741824
     ;;
   "backend")
     echo "Running backend command"
     
     if [ -n "$BOOTSTRAP_FILE" ] && [ -f "$BOOTSTRAP_FILE" ]; then
-      handle_bootstrap_file "$BOOTSTRAP_FILE" "/opt/coins/data/flo/backend" "$BACKEND_BOOTSTRAP_FILE_HASH_FILE"
+      handle_bootstrap_file "$BOOTSTRAP_FILE" "/opt/coins/data/flo_testnet/backend" "$BACKEND_BOOTSTRAP_FILE_HASH_FILE"
     elif [ -n "$BOOTSTRAP_URL" ]; then
-      handle_bootstrap_url "$BOOTSTRAP_URL" "/opt/coins/data/flo/backend" "$BACKEND_BOOTSTRAP_URL_FILE" "bootstrap-backend.tar.gz"
+      handle_bootstrap_url "$BOOTSTRAP_URL" "/opt/coins/data/flo_testnet/backend" "$BACKEND_BOOTSTRAP_URL_FILE" "bootstrap-backend.tar.gz"
     fi
 
-    cd /opt/coins/nodes/flo
-    exec /opt/coins/nodes/flo/bin/flod -datadir=/opt/coins/data/flo/backend -conf=/opt/coins/nodes/flo/flo.conf -pid=/run/flo/flo.pid
+    cd /opt/coins/nodes/flo_testnet
+    exec /opt/coins/nodes/flo_testnet/bin/flod --testnet -datadir=/opt/coins/data/flo_testnet/backend -conf=/opt/coins/nodes/flo_testnet/flo_testnet.conf -pid=/run/flo_testnet/flo_testnet.pid
     ;;
   *)
     echo "Invalid option: $1"

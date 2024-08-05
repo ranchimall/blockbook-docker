@@ -1,45 +1,45 @@
 version: '3.8'
 
 services:
-  blockbook-backend:
+  blockbook-testnet-backend:
     image: ${BACKEND_IMAGE}
     container_name: ${BACKEND_CONTAINER_NAME}
     networks:
-      - blockbook
+      - blockbook-testnet
     volumes:
-      - blockbook:/opt
-      - ${BACKEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz  # Use /dev/null if no file
+      - blockbook-testnet:/opt
+      - ${BACKEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-testnet-backend.tar.gz  # Use /dev/null if no file
     ports:
-      - "${BACKEND_PORT_1}:38366"
-      - "${BACKEND_PORT_2}:8066"
+      - "${BACKEND_PORT_1}:48366"
+      - "${BACKEND_PORT_2}:18066"
     command: backend
     environment:
-      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-backend.tar.gz  # Set to empty string if not provided
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-testnet-backend.tar.gz  # Set to empty string if not provided
       - BOOTSTRAP_URL=${BACKEND_BOOTSTRAP_URL:-}  # Set to empty string if not provided
 
-  blockbook-frontend:
+  blockbook-testnet-frontend:
     image: ${FRONTEND_IMAGE}
     container_name: ${FRONTEND_CONTAINER_NAME}
     networks:
-      - blockbook
+      - blockbook-testnet
     volumes:
-      - blockbook:/opt
-      - ${FRONTEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz  # Use /dev/null if no file
+      - blockbook-testnet:/opt
+      - ${FRONTEND_BOOTSTRAP_FILE:-/dev/null}:/local-bootstrap/bootstrap-blockbook-flo-testnet-frontend.tar.gz  # Use /dev/null if no file
     ports:
-      - "${FRONTEND_PORT_1}:9166"
-      - "${FRONTEND_PORT_2}:9066"
+      - "${FRONTEND_PORT_1}:19166"
+      - "${FRONTEND_PORT_2}:19066"
     depends_on:
-      - blockbook-backend
+      - blockbook-testnet-backend
     entrypoint: /bin/sh -c
     command: >
-      "/opt/entrypoint.sh frontend $(getent hosts blockbook-backend | awk '{ print $1 }')"
+      "/opt/entrypoint.sh frontend $(getent hosts blockbook-testnet-backend | awk '{ print $1 }')"
     environment:
-      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-mainnet-frontend.tar.gz  # Set to empty string if not provided
+      - BOOTSTRAP_FILE=/local-bootstrap/bootstrap-blockbook-flo-testnet-frontend.tar.gz  # Set to empty string if not provided
       - BOOTSTRAP_URL=${FRONTEND_BOOTSTRAP_URL:-}  # Set to empty string if not provided
 
 volumes:
-  blockbook:
+  blockbook-testnet:
 
 networks:
-  blockbook:
+  blockbook-testnet:
     driver: bridge
